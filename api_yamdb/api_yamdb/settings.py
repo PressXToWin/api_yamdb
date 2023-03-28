@@ -18,6 +18,7 @@ AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
+    'content.apps.ContentConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
