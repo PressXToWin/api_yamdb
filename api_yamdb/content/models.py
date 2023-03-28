@@ -16,12 +16,6 @@ class Title(models.Model):
         verbose_name='Год публикации',
         help_text='Укажите год публикации',)
 
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE,
-        related_name='titles',
-        verbose_name='Автор произведения',
-        help_text='Укажите автора произведения')
-
     rating = models.PositiveSmallIntegerField(
         verbose_name='Рейтинг',
         null=True, blank=True,
