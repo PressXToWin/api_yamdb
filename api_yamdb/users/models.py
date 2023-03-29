@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 class User(AbstractUser):
@@ -13,7 +13,13 @@ class User(AbstractUser):
         blank=True
     )
     role = models.CharField(
+        'Роль на сайте',
         max_length=9,
         choices=ROLES,
         default='user',
+    )
+    confirmation_code = models.CharField(
+        'Код подтверждения',
+        max_length=255,
+        default='confirmation_code_123'
     )
