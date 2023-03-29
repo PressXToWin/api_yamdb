@@ -4,12 +4,16 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db import IntegrityError
-from rest_framework import status
+from rest_framework import status, viewsets
+from rest_framework.filters import SearchFilter
+from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from users.serializers import SignupSerializer, TokenSerializer
+from users.permissions import IsAdminRole
+from users.serializers import SignupSerializer, TokenSerializer, UsersSerializer
 
 User = get_user_model()
 
@@ -60,3 +64,12 @@ class APITokenView(APIView):
         return Response(
             {'error': 'Неверный код подтверждения.'},
             status=status.HTTP_400_BAD_REQUEST)
+
+
+class UsersViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('id')
+    serializer_class = UsersSerializer
+    permission_classes = [IsAuthenticated, IsAdminRole]
+    filter_backends = (SearchFilter, )
+    search_fields = ('username',)
+    pagination_class = PageNumberPagination
