@@ -23,3 +23,7 @@ class User(AbstractUser):
         max_length=36,
         default='confirmation_code_123'
     )
+    email = models.EmailField(
+        'Адрес e-mail',
+        unique=True
+    )

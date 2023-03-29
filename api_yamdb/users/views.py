@@ -22,9 +22,12 @@ class APISignupView(APIView):
         try:
             user = serializer.save(confirmation_code=str(uuid4()))
         except IntegrityError:
-            return Response(
-                {'error': 'Такой пользователь уже существует.'},
-                status=status.HTTP_400_BAD_REQUEST)
+            try:
+                user = User.objects.get(username=request.data['username'], email=request.data['email'])
+            except:
+                return Response(
+                    {'error': 'Такой пользователь уже существует.'},
+                    status=status.HTTP_400_BAD_REQUEST)
         send_mail(
             subject='Вы зарегистрированы на YamDB',
             message='Вы зарегистрированы на YamDB \n'
