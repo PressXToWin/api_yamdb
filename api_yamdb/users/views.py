@@ -7,7 +7,6 @@ from django.db import IntegrityError
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -90,24 +89,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
     filter_backends = (SearchFilter, )
     search_fields = ('username',)
-    pagination_class = PageNumberPagination
-
-    def update(self, request, *args, **kwargs):
-        if request.method == 'PUT':
-            return Response(
-                {'error': 'Метод не предусмотрен.'},
-                status=status.HTTP_405_METHOD_NOT_ALLOWED
-            )
-        if request.method == 'PATCH':
-            instance = self.get_object()
-            serializer = self.get_serializer(
-                instance,
-                data=request.data,
-                partial=True
-            )
-            serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
-            return Response(serializer.data)
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     @action(
         methods=['GET', 'PATCH'],
