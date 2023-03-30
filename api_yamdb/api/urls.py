@@ -1,18 +1,27 @@
-from django.urls import path, include
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
-from rest_framework.routers import DefaultRouter 
-from .views import *
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-router_v1 = DefaultRouter() 
-router_v1.register(r'titles', TitleViewSet, basename='titles') 
-router_v1.register(r'genres', GenreViewSet, basename='genres') 
-router_v1.register(r'categories', CategoryViewSet, basename='categories')
+from .views import *
+from users.views import APISignupView, APITokenView, UsersViewSet
+
+app_name = 'api'
+
+v1_router = DefaultRouter()
+v1_router.register('users', UsersViewSet, basename='users')
+v1_router.register(r'titles', TitleViewSet, basename='titles') 
+v1_router.register(r'genres', GenreViewSet, basename='genres') 
+v1_router.register(r'categories', CategoryViewSet, basename='categories')
 
 urlpatterns = [
-    path('v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('v1/', include(router_v1.urls)), 
+    path('v1/', include(v1_router.urls)),
+    path(
+        'v1/auth/token/',
+        APITokenView.as_view(),
+        name='get_token'
+    ),
+    path(
+        'v1/auth/signup/',
+        APISignupView.as_view(),
+        name='signup'
+    ),
 ]
