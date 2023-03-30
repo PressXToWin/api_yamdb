@@ -18,6 +18,7 @@ AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
+    'content.apps.ContentConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -25,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django_filters',
     'rest_framework_simplejwt',
     'reviews.apps.ReviewsConfig',
 ]
