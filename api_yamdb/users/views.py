@@ -4,7 +4,8 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db import IntegrityError
-from rest_framework import status, viewsets
+from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -13,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.permissions import IsAdminRole
-from users.serializers import SignupSerializer, TokenSerializer, UsersSerializer
+from users.serializers import SignupSerializer, TokenSerializer, UsersSerializer, ReadonlyRoleSerializer
 
 User = get_user_model()
 
@@ -70,6 +71,39 @@ class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('id')
     serializer_class = UsersSerializer
     permission_classes = [IsAuthenticated, IsAdminRole]
+    lookup_field = 'username'
     filter_backends = (SearchFilter, )
     search_fields = ('username',)
     pagination_class = PageNumberPagination
+
+    def update(self, request, *args, **kwargs):
+        if request.method == 'PUT':
+            return Response(
+                {'error': 'Метод не предусмотрен.'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
+        if request.method == 'PATCH':
+            instance = self.get_object()
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+            return Response(serializer.data)
+
+    @action(
+        methods=['GET', 'PATCH'],
+        detail=False,
+        url_path='me',
+        permission_classes=[IsAuthenticated, ]
+    )
+    def user_detail(self, request):
+        serializer = UsersSerializer(request.user)
+        if request.method == 'PATCH':
+            serializer = ReadonlyRoleSerializer(
+                request.user,
+                data=request.data,
+                partial=True
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data)
