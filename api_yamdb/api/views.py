@@ -8,6 +8,7 @@ from .serializers import (
     TitleSerializer, CategorySerializer, GenreSerializer, TitleWriteSerializer, TitleReadSerializer) 
 from django.db.models import Avg
 from .filters import TitleFilter
+from .permissions import IsAdminOrReadOnly
 
 
 class CreateListDestroyViewSet(mixins.CreateModelMixin,
@@ -25,7 +26,10 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all() 
     serializer_class = TitleSerializer 
     pagination_class = LimitOffsetPagination 
-    permission_classes = (IsAuthenticatedOrReadOnly,) 
+    permission_classes = (
+        IsAuthenticatedOrReadOnly,
+        IsAdminOrReadOnly,
+    )
 
 
 class CategoryViewSet(CreateListDestroyViewSet):
@@ -35,7 +39,7 @@ class CategoryViewSet(CreateListDestroyViewSet):
     serializer_class = CategorySerializer
     permission_classes = (
         IsAuthenticatedOrReadOnly,
-        # IsAdminOrReadOnly,
+        IsAdminOrReadOnly,
     )
 
 class GenreViewSet(CreateListDestroyViewSet):
@@ -45,7 +49,7 @@ class GenreViewSet(CreateListDestroyViewSet):
     serializer_class = GenreSerializer
     permission_classes = (
         IsAuthenticatedOrReadOnly,
-        # IsAdminOrReadOnly,
+        IsAdminOrReadOnly,
     )
 
 
@@ -60,7 +64,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     filterset_class = TitleFilter
     permission_classes = (
         IsAuthenticatedOrReadOnly,
-        # IsAdminOrReadOnly,
+        IsAdminOrReadOnly,
     )
 
     def get_serializer_class(self):

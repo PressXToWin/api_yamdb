@@ -52,7 +52,7 @@ class Category(models.Model):
 
     slug = models.SlugField(
         verbose_name='Псевдоним категории',
-        max_length=64, unique=True)
+        max_length=50, unique=True)
 
     def __str__(self):
         return self.slug
@@ -72,7 +72,7 @@ class Genre(models.Model):
 
     slug = models.SlugField(
         verbose_name='Псевдоним жанра',
-        max_length=64, unique=True)
+        max_length=50, unique=True)
 
     def __str__(self):
         return self.slug
