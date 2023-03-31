@@ -4,8 +4,10 @@ import re
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
+
 class CategorySerializer(serializers.ModelSerializer):
     """Сериализатор модели Category."""
+
     def validate_slug(self, value):
         """Проверка соответствия слага категории."""
         if not re.fullmatch(r'^[-a-zA-Z0-9_]+$', value):
@@ -40,6 +42,7 @@ class GenreSerializer(serializers.ModelSerializer):
 class RatingRelatedField(serializers.RelatedField):
     def to_representation(self, value):
         return value.score
+
 
 class TitleSerializer(serializers.ModelSerializer):
     """Базовый сериализатор модели Title."""
@@ -98,7 +101,7 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only=True, slug_field='text')
 
     class Meta:
-        fields = ('id', 'text', 'author', 'pub_data',)
+        fields = '__all__'
         model = Comment
 
 
