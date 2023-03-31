@@ -12,7 +12,6 @@ from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer,
                           ReviewSerializer)
 
 
-
 class CreateListDestroyViewSet(mixins.CreateModelMixin,
                                mixins.ListModelMixin,
                                mixins.DestroyModelMixin,
@@ -59,10 +58,6 @@ class GenreViewSet(CreateListDestroyViewSet):
 class TitleViewSet(viewsets.ModelViewSet):
     """Вьюсет для модели Title."""
     queryset = Title.objects.all()
-
-    # queryset = Title.objects.annotate(
-    #     rating=Avg('reviews__score'),
-    # ).order_by('name')
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
     permission_classes = (

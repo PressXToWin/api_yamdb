@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Avg
 from reviews.models import Comment, Review, Genre, Category, Title
 import re
 from django.utils import timezone
@@ -39,16 +40,14 @@ class GenreSerializer(serializers.ModelSerializer):
         lookup_field = 'slug'
 
 
-class RatingRelatedField(serializers.RelatedField):
-    def to_representation(self, value):
-        return value.score
-
-
 class TitleSerializer(serializers.ModelSerializer):
     """Базовый сериализатор модели Title."""
 
-    # rating = serializers.IntegerField(read_only=True)
-    rating = RatingRelatedField(read_only=True)
+    rating = serializers.SerializerMethodField()
+
+    def get_rating(self, obj):
+        rating = obj.reviews.aggregate(Avg('score')).get('score__avg')
+        return rating if not rating else round(rating, 0)
 
     def validate_year(self, value):
         """Проверка года на будущее время."""
