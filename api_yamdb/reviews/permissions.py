@@ -13,7 +13,6 @@ class IsAdminOrReadOnly(permissions.BasePermission):
                 or (request.user.is_authenticated and request.user.role == 'admin'))
 
 
-
 class AdminModeratorAuthorPermission(permissions.BasePermission):
     """Редактирование только автору, модератору и админу."""
 
@@ -29,4 +28,5 @@ class AdminModeratorAuthorPermission(permissions.BasePermission):
             or obj.author == request.user
             or request.user.is_admin
             or request.user.is_moderator
+            or request.user.is_superuser
         )
