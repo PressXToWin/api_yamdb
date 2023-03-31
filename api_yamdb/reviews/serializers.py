@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from reviews.models import *
+from reviews.models import Comment, Review, Genre, Category, Title
 import re
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
@@ -95,10 +95,12 @@ class TitleWriteSerializer(TitleSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    review = serializers.SlugRelatedField(
+        slug_field='text',
+        read_only=True
+    )
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username')
-    review = serializers.SlugRelatedField(
-        read_only=True, slug_field='text')
 
     class Meta:
         fields = '__all__'
@@ -106,14 +108,15 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    title = serializers.SlugRelatedField(
+        slug_field='name',
+        read_only=True
+    )
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username')
 
-    title = serializers.SlugRelatedField(
-        read_only=True, slug_field='name')
-
     class Meta:
-        fields = ('id', 'text', 'author', 'score', 'title')
+        fields = '__all__'
         model = Review
 
     def validate_score(self, value):

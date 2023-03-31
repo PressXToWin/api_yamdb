@@ -127,8 +127,13 @@ class Review(models.Model):
     score = models.PositiveSmallIntegerField(
         validators=[
             MinValueValidator(1),
-            MaxValueValidator(10),
+            MaxValueValidator(10)
         ]
+    )
+    pub_date = models.DateTimeField(
+        verbose_name='Время добавления',
+        auto_now_add=True,
+        db_index=True
     )
 
     class Meta:

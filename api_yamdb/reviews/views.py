@@ -77,6 +77,7 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    pagination_class = LimitOffsetPagination
     permisson_classes = (AdminModeratorAuthorPermission,)
     serializer_class = CommentSerializer
 
