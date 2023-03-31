@@ -19,10 +19,10 @@ class CreateListDestroyViewSet(mixins.CreateModelMixin,
     search_fields = ('name',)
 
 
-class TitleViewSet(viewsets.ModelViewSet): 
-    queryset = Title.objects.all() 
-    serializer_class = TitleSerializer 
-    pagination_class = LimitOffsetPagination 
+class TitleViewSet(viewsets.ModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = TitleSerializer
+    pagination_class = LimitOffsetPagination
     permission_classes = (
         # IsAuthenticatedOrReadOnly,
         IsAdminOrReadOnly,
@@ -53,7 +53,7 @@ class GenreViewSet(CreateListDestroyViewSet):
 class TitleViewSet(viewsets.ModelViewSet):
     """Вьюсет для модели Title."""
     queryset = Title.objects.all()
-    
+
     # queryset = Title.objects.annotate(
     #     rating=Avg('reviews__score'),
     # ).order_by('name')

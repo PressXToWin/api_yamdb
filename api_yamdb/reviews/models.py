@@ -16,7 +16,7 @@ class Title(models.Model):
     year = models.PositiveIntegerField(
         verbose_name='Год публикации',
         help_text='Укажите год публикации',)
-    
+
     rating = models.ForeignKey(
         'Review',
         on_delete=models.SET_NULL,
@@ -130,9 +130,6 @@ class Review(models.Model):
             MaxValueValidator(10),
         ]
     )
-    pub_date = models.DateTimeField(
-        auto_now_add=True
-    )
 
     class Meta:
         constraints = [
@@ -140,7 +137,6 @@ class Review(models.Model):
                 fields=('title', 'author'),
                 name='unique_review_for_title')
         ]
-        ordering = ('pub_date',)
 
     def __str__(self):
         return self.text

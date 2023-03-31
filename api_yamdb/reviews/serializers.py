@@ -1,4 +1,4 @@
-from rest_framework import serializers 
+from rest_framework import serializers
 from reviews.models import *
 import re
 from django.utils import timezone
@@ -14,13 +14,13 @@ class CategorySerializer(serializers.ModelSerializer):
             )
         return value
 
-    class Meta: 
-        model = Category 
+    class Meta:
+        model = Category
         fields = ('name', 'slug')
         lookup_field = 'slug'
 
 
-class GenreSerializer(serializers.ModelSerializer): 
+class GenreSerializer(serializers.ModelSerializer):
     """Сериализатор модели Genre."""
 
     def validate_slug(self, value):
@@ -34,7 +34,7 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('name', 'slug')
         model = Genre
-        lookup_field = 'slug' 
+        lookup_field = 'slug'
 
 
 class RatingRelatedField(serializers.RelatedField):
@@ -110,7 +110,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         read_only=True, slug_field='name')
 
     class Meta:
-        fields = ('id', 'text', 'author', 'score', 'pub_data')
+        fields = ('id', 'text', 'author', 'score', 'title')
         model = Review
 
     def validate_score(self, value):
