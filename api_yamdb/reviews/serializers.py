@@ -1,9 +1,10 @@
-from rest_framework import serializers
-from django.db.models import Avg
-from reviews.models import Comment, Review, Genre, Category, Title
 import re
-from django.utils import timezone
+
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from rest_framework import serializers
+from reviews.models import Category, Comment, Genre, Review, Title
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -54,7 +55,7 @@ class TitleSerializer(serializers.ModelSerializer):
         current_year = timezone.now().year
         if value > current_year:
             raise serializers.ValidationError(
-                'Марти, ты опять взял Делориан без спроса?!',
+                'Год произведения не может быть больше текущего!',
             )
         return value
 
@@ -102,7 +103,7 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only=True, slug_field='username')
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'text', 'review', 'author', 'pub_date',)
         model = Comment
 
 
@@ -115,7 +116,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         read_only=True, slug_field='username')
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'text', 'title', 'author', 'score', 'pub_date')
         model = Review
 
     def validate_score(self, value):

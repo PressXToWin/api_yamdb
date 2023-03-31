@@ -9,8 +9,8 @@ class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         """Проверка на запросы к объекту
         Для безопасных методов всегда True."""
-        return (request.method in permissions.SAFE_METHODS
-                or (request.user.is_authenticated and request.user.role == 'admin'))
+        return (request.method in permissions.SAFE_METHODS or (
+            request.user.is_authenticated and request.user.role == 'admin'))
 
 
 class AdminModeratorAuthorPermission(permissions.BasePermission):
@@ -28,5 +28,4 @@ class AdminModeratorAuthorPermission(permissions.BasePermission):
             or obj.author == request.user
             or request.user.is_admin
             or request.user.is_moderator
-            or request.user.is_superuser
         )

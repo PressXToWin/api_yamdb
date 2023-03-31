@@ -18,6 +18,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('review',)
     empty_value_display = '-пусто-'
 
+
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = (
