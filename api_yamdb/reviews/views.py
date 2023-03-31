@@ -3,10 +3,15 @@ from rest_framework import viewsets, filters, mixins
 from rest_framework.permissions import SAFE_METHODS
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
-from .serializers import *
 from .filters import TitleFilter
 from .permissions import IsAdminOrReadOnly, AdminModeratorAuthorPermission
 from django.shortcuts import get_object_or_404
+from reviews.models import Category, Genre, Review, Title
+from .serializers import (CategorySerializer, GenreSerializer, TitleSerializer,
+                          TitleReadSerializer, TitleWriteSerializer, CommentSerializer,
+                          ReviewSerializer)
+
+
 
 class CreateListDestroyViewSet(mixins.CreateModelMixin,
                                mixins.ListModelMixin,
@@ -38,6 +43,7 @@ class CategoryViewSet(CreateListDestroyViewSet):
         # IsAuthenticatedOrReadOnly,
         IsAdminOrReadOnly,
     )
+
 
 class GenreViewSet(CreateListDestroyViewSet):
     """Вьюсет для модели Genre."""
