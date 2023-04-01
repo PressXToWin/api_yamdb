@@ -1,9 +1,7 @@
 from django.contrib import admin
 from django.db.models import Avg
 
-from .models import (
-    Comment, Review, Category,
-    Title, Genre, GenreTitle)
+from .models import Category, Comment, Genre, GenreTitle, Review, Title
 
 
 @admin.register(Comment)
