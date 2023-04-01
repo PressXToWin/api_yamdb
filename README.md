@@ -47,6 +47,14 @@ pip install -r requirements.txt
 python3 manage.py migrate
 ```
 
+
+(опционально)Заолнить базу данных данными из csv файлов:
+
+```
+python3 manage.py load_csv
+```
+
+
 Запустить проект:
 
 ```
@@ -73,3 +81,5 @@ YaMDB отправляет письмо с кодом подтверждения
 ```
 http://127.0.0.1:8000/redoc/
 ```
+
+
