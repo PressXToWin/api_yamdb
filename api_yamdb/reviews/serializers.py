@@ -11,6 +11,11 @@ from reviews.models import Category, Comment, Genre, Review, Title
 class CategorySerializer(serializers.ModelSerializer):
     """Сериализатор модели Category."""
 
+    class Meta:
+        model = Category
+        fields = ('name', 'slug')
+        lookup_field = 'slug'
+
     def validate_slug(self, value):
         """Проверка соответствия слага категории."""
         if not re.fullmatch(r'^[-a-zA-Z0-9_]+$', value):
@@ -19,14 +24,14 @@ class CategorySerializer(serializers.ModelSerializer):
             )
         return value
 
-    class Meta:
-        model = Category
-        fields = ('name', 'slug')
-        lookup_field = 'slug'
-
 
 class GenreSerializer(serializers.ModelSerializer):
     """Сериализатор модели Genre."""
+
+    class Meta:
+        fields = ('name', 'slug')
+        model = Genre
+        lookup_field = 'slug'
 
     def validate_slug(self, value):
         """Проверка соответствия слага жанра."""
@@ -36,16 +41,15 @@ class GenreSerializer(serializers.ModelSerializer):
             )
         return value
 
-    class Meta:
-        fields = ('name', 'slug')
-        model = Genre
-        lookup_field = 'slug'
-
 
 class TitleSerializer(serializers.ModelSerializer):
     """Базовый сериализатор модели Title."""
 
     rating = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Title
+        fields = '__all__'
 
     def get_rating(self, obj):
         rating = obj.reviews.aggregate(Avg('score')).get('score__avg')
@@ -59,10 +63,6 @@ class TitleSerializer(serializers.ModelSerializer):
                 'Год произведения не может быть больше текущего!',
             )
         return value
-
-    class Meta:
-        model = Title
-        fields = '__all__'
 
 
 class TitleReadSerializer(TitleSerializer):
@@ -96,7 +96,7 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only=True, slug_field='username')
 
     class Meta:
-        fields = ('id', 'text', 'review', 'author', 'pub_date',)
+        fields = '__all__'
         model = Comment
 
 
@@ -109,7 +109,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         read_only=True, slug_field='username')
 
     class Meta:
-        fields = ('id', 'text', 'title', 'author', 'score', 'pub_date')
+        fields = '__all__'
         model = Review
 
     def validate_score(self, value):
