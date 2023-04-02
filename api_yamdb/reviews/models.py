@@ -16,7 +16,8 @@ class Title(models.Model):
 
     year = models.PositiveIntegerField(
         verbose_name='Год публикации',
-        help_text='Укажите год публикации',)
+        help_text='Укажите год публикации',
+        db_index=True)
 
     rating = models.ForeignKey(
         'Review',
@@ -38,13 +39,13 @@ class Title(models.Model):
         verbose_name='Жанр',
         through='GenreTitle')
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
         ordering = ('-year', 'name')
+    
+    def __str__(self):
+        return self.name
 
 
 class Category(models.Model):
@@ -59,13 +60,13 @@ class Category(models.Model):
         verbose_name='Псевдоним категории',
         max_length=50, unique=True)
 
-    def __str__(self):
-        return self.slug
-
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
         ordering = ('name', )
+
+    def __str__(self):
+        return self.slug
 
 
 class Genre(models.Model):
@@ -79,13 +80,13 @@ class Genre(models.Model):
         verbose_name='Псевдоним жанра',
         max_length=50, unique=True)
 
-    def __str__(self):
-        return self.slug
-
     class Meta:
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
         ordering = ('name', )
+
+    def __str__(self):
+        return self.slug
 
 
 class GenreTitle(models.Model):
@@ -101,9 +102,6 @@ class GenreTitle(models.Model):
         verbose_name='Жанр',
         on_delete=models.SET_NULL)
 
-    def __str__(self):
-        return f'{self.title}, жанр - {self.genre}'
-
     class Meta:
         verbose_name = 'Произведение и жанр'
         verbose_name_plural = 'Произведения и жанры'
@@ -113,6 +111,9 @@ class GenreTitle(models.Model):
                 name='unique_genre_title',
             ),
         )
+
+    def __str__(self):
+        return f'{self.title}, жанр - {self.genre}'
 
 
 class Review(models.Model):
