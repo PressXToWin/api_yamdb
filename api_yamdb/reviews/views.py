@@ -9,17 +9,7 @@ from .filters import TitleFilter
 from .permissions import AdminModeratorAuthorPermission, IsAdminOrReadOnly
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ReviewSerializer,
-                          TitleReadSerializer, TitleSerializer,
-                          TitleWriteSerializer)
-
-
-class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
-    serializer_class = TitleSerializer
-    pagination_class = LimitOffsetPagination
-    permission_classes = (
-        IsAdminOrReadOnly,
-    )
+                          TitleReadSerializer, TitleWriteSerializer)
 
 
 class CategoryViewSet(CreateListDestroyViewSet):
