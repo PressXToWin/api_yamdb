@@ -1,38 +1,17 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, viewsets
+from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import SAFE_METHODS
 
 from reviews.models import Category, Genre, Review, Title
 
 from .filters import TitleFilter
+from .mixins import CreateListDestroyViewSet
 from .permissions import AdminModeratorAuthorPermission, IsAdminOrReadOnly
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ReviewSerializer,
-                          TitleReadSerializer, TitleSerializer,
-                          TitleWriteSerializer)
-
-
-class CreateListDestroyViewSet(mixins.CreateModelMixin,
-                               mixins.ListModelMixin,
-                               mixins.DestroyModelMixin,
-                               viewsets.GenericViewSet):
-    """Дженерик для операций retrieve/create/list."""
-
-    lookup_field = 'slug'
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
-
-
-class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
-    serializer_class = TitleSerializer
-    pagination_class = LimitOffsetPagination
-    permission_classes = (
-        # IsAuthenticatedOrReadOnly,
-        IsAdminOrReadOnly,
-    )
+                          TitleReadSerializer, TitleWriteSerializer)
 
 
 class CategoryViewSet(CreateListDestroyViewSet):
@@ -41,7 +20,6 @@ class CategoryViewSet(CreateListDestroyViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (
-        # IsAuthenticatedOrReadOnly,
         IsAdminOrReadOnly,
     )
 
@@ -52,7 +30,6 @@ class GenreViewSet(CreateListDestroyViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = (
-        # IsAuthenticatedOrReadOnly,
         IsAdminOrReadOnly,
     )
 
@@ -63,7 +40,6 @@ class TitleViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
     permission_classes = (
-        # IsAuthenticatedOrReadOnly,
         IsAdminOrReadOnly,
     )
 
